@@ -22,11 +22,14 @@ const root = dirname(fileURLToPath(import.meta.url))
 // `vapor` keyword and the mount call.
 const SCENARIOS = [
   { id: 'dynamic-list', label: 'Dynamic list (10k reactive rows)' },
-  { id: 'static-list', label: 'Static list (10k static rows)' },
   { id: 'components', label: 'Components (10k child components)' },
+  { id: 'components-static', label: 'Static components (10k static)' },
 ]
 const VARIANTS = ['vdom', 'vapor']
 const ITEMS = 10000
+// Heap size varies a little run-to-run (GC timing). Average over N snapshots.
+// Override with e.g. `SAMPLES=100 node benchmark.mjs`.
+const SAMPLES = Math.max(1, Number(process.env.SAMPLES) || 5)
 
 function run(cmd, args, cwd) {
   const r = spawnSync(cmd, args, { cwd, stdio: 'inherit', shell: process.platform === 'win32' })
@@ -122,17 +125,21 @@ async function measureHeap(browser, url) {
 }
 
 // ---- 5. Run the matrix -----------------------------------------------------
-console.log('\n📸  Taking heap snapshots in headless Chrome…')
+console.log(
+  `\n📸  Taking heap snapshots in headless Chrome (averaging ${SAMPLES} per app)…`,
+)
 const browser = await chromium.launch({ args: ['--no-sandbox'] })
 const results = []
 for (const { id, label } of SCENARIOS) {
   const row = { id, label }
   for (const variant of VARIANTS) {
     const distDir = join(root, 'scenarios', id, variant, 'dist')
-    const site = await serve(distDir)
+    const site = await serve(distDir) // serve once, reload per sample
     process.stdout.write(`   ${id}/${variant} … `)
-    row[variant] = await measureHeap(browser, site.url)
+    let sum = 0
+    for (let i = 0; i < SAMPLES; i++) sum += await measureHeap(browser, site.url)
     await site.close()
+    row[variant] = sum / SAMPLES
     console.log(`${(row[variant] / 1048576).toFixed(1)} MB`)
   }
   results.push(row)

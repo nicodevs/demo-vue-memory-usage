@@ -27,8 +27,8 @@ Memory usage — Vue 3.6 Virtual DOM vs Vue 3.6 Vapor Mode (10,000 items)
   Scenario                            Virtual DOM   Vapor      Vapor advantage
   ──────────────────────────────────  ───────────   ────────   ───────────────
   Dynamic list (10k reactive rows)    …             …          …
-  Static list (10k static rows)       …             …          …
   Components (10k child components)    …             …          …
+  Static components (10k static)      …             …          …
 ```
 
 (Requires Node ≥ 20.19 or ≥ 22.12 — Vite 8's build needs it.)
@@ -41,18 +41,18 @@ mount call (`createApp` vs `createVaporApp`):
 
 | Folder | What it renders |
 | ------ | --------------- |
-| `scenarios/dynamic-list/` | 10,000 rows in one `v-for`, each cell bound to reactive data |
-| `scenarios/static-list/`  | 10,000 rows in one `v-for`, static cell content |
-| `scenarios/components/`   | 10,000 child `<Row>` components, one per row |
+| `scenarios/dynamic-list/`     | 10,000 rows in one `v-for`, each cell bound to reactive data |
+| `scenarios/components/`       | 10,000 child `<Row>` components, one per row (dynamic content) |
+| `scenarios/components-static/`| 10,000 child `<Row>` components with static content |
 
 ```
 scenarios/
   dynamic-list/
     vdom/    ← Vue 3.6, classic Virtual DOM
     vapor/   ← Vue 3.6 Vapor Mode
-  static-list/
-    vdom/  vapor/
   components/
+    vdom/  vapor/
+  components-static/
     vdom/  vapor/
 ```
 

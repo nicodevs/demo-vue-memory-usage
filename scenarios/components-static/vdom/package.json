@@ -1,5 +1,5 @@
 {
-  "name": "static-list-vdom",
+  "name": "components-static-vdom",
   "private": true,
   "type": "module",
   "scripts": {
