@@ -1,0 +1,32 @@
+{
+  "name": "dynamic-list-vapor",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "beta",
+    "@vue/runtime-vapor": "beta"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.6",
+    "vite": "^8.0.8"
+  },
+  "overrides": {
+    "vue": "beta",
+    "@vue/compiler-core": "beta",
+    "@vue/compiler-dom": "beta",
+    "@vue/compiler-sfc": "beta",
+    "@vue/compiler-ssr": "beta",
+    "@vue/compiler-vapor": "beta",
+    "@vue/reactivity": "beta",
+    "@vue/runtime-core": "beta",
+    "@vue/runtime-dom": "beta",
+    "@vue/runtime-vapor": "beta",
+    "@vue/server-renderer": "beta",
+    "@vue/shared": "beta"
+  }
+}
